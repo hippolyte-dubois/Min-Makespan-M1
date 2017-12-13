@@ -33,3 +33,13 @@ def lsa(T, m):
         machines[first_available(machines)].append(task)
     return machines
 
+def lpt(T, m):
+    """
+    In:
+    - T, an int array of size n
+    - m, the number of machines
+    Out:
+    - a dictionnary of (int, int array) of size m
+    """
+    sorted_tasks = sorted(T,reverse=True)
+    return lsa(sorted_tasks, m)
