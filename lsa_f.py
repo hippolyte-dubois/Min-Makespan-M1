@@ -1,6 +1,12 @@
 #! /usr/local/bin/python3
 
 def first_available(machines):
+    """
+    In:
+    - machines, a dictionnary of (int, int array)
+    Out:
+    - the id of the first available machine
+    """
     i = 0
     min_id = 0
     min_value = sum(machines[0])
@@ -18,12 +24,13 @@ def lsa(T, m):
     - T, an int array of size n
     - m, the number of machines
     Out:
-    - an array of array of int of size m
+    - a dictionnary of (int, int array) of size m
     """
     machines = {}
-    for i in range(0,m):
+    for i in range(0, m):
         machines[i] = []
     for task in T:
+        print(task)
         machines[first_available(machines)].append(task)
     return machines
 
