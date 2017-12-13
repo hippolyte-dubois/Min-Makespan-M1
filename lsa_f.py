@@ -30,7 +30,6 @@ def lsa(T, m):
     for i in range(0, m):
         machines[i] = []
     for task in T:
-        print(task)
         machines[first_available(machines)].append(task)
     return machines
 
