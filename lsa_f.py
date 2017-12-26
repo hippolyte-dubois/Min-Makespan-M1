@@ -25,6 +25,7 @@ def lsa(T, m):
     - m, the number of machines
     Out:
     - a dictionnary of (int, int array) of size m
+    Complexity: O(n * m)
     """
     machines = {}
     for i in range(0, m):
@@ -40,6 +41,7 @@ def lpt(T, m):
     - m, the number of machines
     Out:
     - a dictionnary of (int, int array) of size m
+    Complexity: O(n log n + n * m)
     """
-    sorted_tasks = sorted(T,reverse=True)
+    sorted_tasks = sorted(T,reverse=True) # Timsort algorithm O(n log n)
     return lsa(sorted_tasks, m)
