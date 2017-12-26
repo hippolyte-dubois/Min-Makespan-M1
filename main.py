@@ -55,3 +55,53 @@ for i in range(0,3):
     print("//////")
     print("------")
 '''
+
+
+def generation_instances(m,n,k,minVal,maxVal):
+    res = []
+    for i in range(k):
+        T=[]
+        for j in range(n):
+            T.append(randint(minVal,maxVal))
+        res.append((T,m))
+    return res
+
+def main():
+    end = False
+    while not(end):
+        print("Choisir un mode d'execution : ")
+        print("1 : Charger une instance depuis un fichier")
+        print("2 : Charger une instance au clavier")
+        print("3 : Génération aléatoire d'instances")
+        print("4 : Quitter le programme")
+
+        choix = input()
+
+        if choix == "1" :
+            None
+
+        elif choix == "2" :
+            None
+
+        elif choix == "3" :
+            m = input("m : ")
+            n = input("n : ")
+            k = input("k : ")
+            minVal = input("min : ")
+            maxVal = input("max : ")
+
+            instances = generation_instances(int(m),int(n),int(k),int(minVal),int(maxVal))
+            print(instances)
+
+
+        elif choix == "4" :
+            end = True
+
+        else :
+            print("Choix incorrect")
+        print()
+        print("    -----------    ")
+        print()
+
+
+main()
