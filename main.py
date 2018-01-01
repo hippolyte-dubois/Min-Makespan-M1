@@ -63,8 +63,41 @@ def generation_instances(m,n,k,minVal,maxVal):
         T=[]
         for j in range(n):
             T.append(randint(minVal,maxVal))
-        res.append((T,m))
+        res.append((m,T))
     return res
+
+
+def transformation_instance(ligne):
+    modifiedList = [int(x) for x in ligne.split(":")]
+    machines = modifiedList.pop(0)
+    tasks = modifiedList.pop(0)
+    return (machines, modifiedList)
+
+
+def lecture_fichier(fichier):    
+    file  = open(fichier, "r")
+    return transformation_instance(file.read())
+   
+
+def appel_algorithmes(taches, machines):
+    return [lsa(taches, machines), lpt(taches, machines), msa(taches, machines)]  
+
+
+def affichage_instance(instance):
+    print("Instance : machines = "+str(instance[0])+" | tâches = "+str(instance[1]))
+    print()
+
+
+def get_algorithm_result(result):
+    return max([sum(x) for x in result.values()])
+
+
+def affichage_resultats(results):
+    print('Borne inférieure "maximum" = ' )
+    print('Borne inférieure "moyenne" = ' )
+    print('Résultat LSA = ' + str(get_algorithm_result(results[0])) )
+    print('Résultat LPT = ' + str(get_algorithm_result(results[1])) )
+    print('Résultat MSA = ' + str(get_algorithm_result(results[2])) )
 
 def main():
     end = False
@@ -76,29 +109,51 @@ def main():
         print("4 : Quitter le programme")
 
         choix = input()
+        print()
 
+        # Chargement depuis fichier
         if choix == "1" :
-            None
+            fichier = input("Nom du fichier : ")
+            try:
+                instance = lecture_fichier(fichier)
+                affichage_instance(instance)
+            
+                resultats = appel_algorithmes(instance[1],instance[0])
+                affichage_resultats(resultats)
+            except FileNotFoundError:
+                print("Fichier inconnu, veuillez entrer un nom de fichier valide")
+          
 
+        # Chargement instance au clavier
         elif choix == "2" :
-            None
+            instance = input('Instance : ')
+            instance = transformation_instance(instance)
+            affichage_instance(instance)
+           
+            resultats = appel_algorithmes(instance[1],instance[0])
+            affichage_resultats(resultats)
 
+        # Génération d'instance            
         elif choix == "3" :
             m = input("m : ")
             n = input("n : ")
             k = input("k : ")
             minVal = input("min : ")
             maxVal = input("max : ")
+            print()
 
             instances = generation_instances(int(m),int(n),int(k),int(minVal),int(maxVal))
-            print(instances)
+            for instance in instances:
+                affichage_instance(instance)
 
 
+        # Quitter le programme
         elif choix == "4" :
             end = True
 
         else :
             print("Choix incorrect")
+
         print()
         print("    -----------    ")
         print()

@@ -14,18 +14,19 @@ def msa(T, m):
     machines = {}
     i = 0
     while i < len(T):
-        sumed = 0
-        tasks.append([])
-        while sumed <= maxed and i < len(T):
+        sumed = T[i]
+        tasks.append([T[i]])
+        i += 1
+        while i < len(T) and sumed + T[i] <= maxed :
             sumed += T[i]
             tasks[len(tasks) - 1].append(T[i])
             i += 1
 
     for j in range(0,m):
-        machines[j] = []
+        machines[j] = []    
     i = 0
-    for t in tasks:
-        machines[i].append(t)
+    for t in tasks:        
+        machines[i]=t
         i += 1
         i = i % m
     return machines
