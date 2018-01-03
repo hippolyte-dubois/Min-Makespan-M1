@@ -1,6 +1,6 @@
 #! /usr/local/bin/python3
 
-def msa(T, m):
+def my_algo(T, m):
     """
     In:
     - T, an int array of size n
@@ -26,7 +26,7 @@ def msa(T, m):
         machines[j] = []    
     i = 0
     for t in tasks:        
-        machines[i]=t
+        machines[i]+=t
         i += 1
         i = i % m
     return machines

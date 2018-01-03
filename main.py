@@ -4,57 +4,7 @@ from random import randint
 
 from lsa_f import lsa
 from lsa_f import lpt
-from msa_f import msa
-
-Tasks = [2, 7, 1, 3, 2, 6, 2, 3, 6, 2, 5]
-T2 = []
-T3 = []
-for i in range(0,50):
-    T2.append(randint(1, 5))
-    T3.append(randint(1,10))
-'''
-print(lsa(Tasks, 3))
-print(lsa(T2, 3))
-print(lsa(T3, 3))
-
-print(lpt(Tasks, 3))
-print(lpt(T2, 3))
-print(lpt(T3, 3))
-
-print(msa(Tasks, 3))
-print(msa(T2,3))
-print(msa(T3,3))
-'''
-
-msa_T1 = msa(Tasks, 3)
-#msa_T2 = msa(T2, 3)
-#msa_T3 = msa(T3, 3)
-
-lsa_T1 = lsa(Tasks, 3)
-lsa_T2 = lsa(T2, 3)
-lsa_T3 = lsa(T3, 3)
-
-lpt_T1 = lpt(Tasks, 3)
-lpt_T2 = lpt(T2, 3)
-lpt_T3 = lpt(T3, 3)
-'''
-for i in range(0,3):
-    print(msa_T1[i])
-    #print(msa_T2[i])
-    #print(msa_T3[i])
-    print("//////")
-
-    print(lsa_T1[i])
-    #print(lsa_T2[i])
-    #print(lsa_T3[i])
-    print("//////")
-
-    print(lpt_T1[i])
-    #print(lpt_T2[i])
-    #print(lpt_T3[i])
-    print("//////")
-    print("------")
-'''
+from my_algo_f import my_algo
 
 
 def generation_instances(m,n,k,minVal,maxVal):
@@ -80,24 +30,25 @@ def lecture_fichier(fichier):
    
 
 def appel_algorithmes(taches, machines):
-    return [lsa(taches, machines), lpt(taches, machines), msa(taches, machines)]  
+    return [lsa(taches, machines), lpt(taches, machines), my_algo(taches, machines)]  
 
 
 def affichage_instance(instance):
-    print("Instance : machines = "+str(instance[0])+" | tâches = "+str(instance[1]))
-    print()
+    return("Instance : machines = "+str(instance[0])+" | tâches = "+str(instance[1])+'\n') 
 
 
 def get_algorithm_result(result):
     return max([sum(x) for x in result.values()])
 
 
-def affichage_resultats(results):
-    print('Borne inférieure "maximum" = ' )
-    print('Borne inférieure "moyenne" = ' )
-    print('Résultat LSA = ' + str(get_algorithm_result(results[0])) )
-    print('Résultat LPT = ' + str(get_algorithm_result(results[1])) )
-    print('Résultat MSA = ' + str(get_algorithm_result(results[2])) )
+def affichage_resultats(instance,results):
+    return('Borne inférieure "maximum" = Topt >= ' + str(max(instance[1])) +'\n'+
+          'Borne inférieure "moyenne" = Topt >= ' + str(sum(instance[1])/instance[0]) +'\n'+    
+          'Résultat LSA : '+str(get_algorithm_result(results[0])) +'\n'+   
+          'Résultat LPT : '+str(get_algorithm_result(results[1])) +'\n'+  
+          'Résultat MyAlgo : '+str(get_algorithm_result(results[2]))+ '\n' )
+
+
 
 def main():
     end = False
@@ -116,10 +67,10 @@ def main():
             fichier = input("Nom du fichier : ")
             try:
                 instance = lecture_fichier(fichier)
-                affichage_instance(instance)
+                print(affichage_instance(instance))
             
                 resultats = appel_algorithmes(instance[1],instance[0])
-                affichage_resultats(resultats)
+                print(affichage_resultats(instance,resultats))
             except FileNotFoundError:
                 print("Fichier inconnu, veuillez entrer un nom de fichier valide")
           
@@ -128,10 +79,10 @@ def main():
         elif choix == "2" :
             instance = input('Instance : ')
             instance = transformation_instance(instance)
-            affichage_instance(instance)
+            print(affichage_instance(instance))
            
             resultats = appel_algorithmes(instance[1],instance[0])
-            affichage_resultats(resultats)
+            print(affichage_resultats(instance,resultats))
 
         # Génération d'instance            
         elif choix == "3" :
@@ -140,11 +91,34 @@ def main():
             k = input("k : ")
             minVal = input("min : ")
             maxVal = input("max : ")
-            print()
+            filename = input("Nom du fichier de sauvegarde : ")
 
             instances = generation_instances(int(m),int(n),int(k),int(minVal),int(maxVal))
+
+            fichierResultat = open(filename, "w")
+
+            ratioLPT = 0
+            ratioLSA = 0
+            ratioMyAlgo = 0
+
             for instance in instances:
-                affichage_instance(instance)
+                fichierResultat.write(affichage_instance(instance)+'\n')
+                resultats = appel_algorithmes(instance[1],instance[0])
+
+                m1 = (max(sum(instance[1])/instance[0], max(instance[1])))
+
+                ratioLSA += get_algorithm_result(resultats[0])/m1
+                ratioLPT += get_algorithm_result(resultats[1])/m1
+                ratioMyAlgo += get_algorithm_result(resultats[2])/m1
+
+                fichierResultat.write(affichage_resultats(instance,resultats)+'\n')
+                fichierResultat.write("     ----------------------------      \n\n")
+
+            fichierResultat.write("ratio d’approximation moyen LSA = "+ str(ratioLSA/float(k))+'\n')
+            fichierResultat.write("ratio d’approximation moyen LPT = "+ str(ratioLPT/float(k))+'\n')
+            fichierResultat.write("ratio d’approximation moyen MyAlgo = "+ str(ratioMyAlgo/float(k))+'\n')
+
+            fichierResultat.close()
 
 
         # Quitter le programme
