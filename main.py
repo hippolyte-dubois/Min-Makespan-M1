@@ -2,6 +2,8 @@
 
 from random import randint
 
+import re
+
 from lsa_f import lsa
 from lsa_f import lpt
 from my_algo_f import my_algo
@@ -18,9 +20,16 @@ def generation_instances(m,n,k,minVal,maxVal):
 
 
 def transformation_instance(ligne):
+    if not(re.match("[0-9]+:[0-9]+(:[0-9]+)*", ligne)) :
+        raise Exception("Syntaxe incorrecte.")
+
     modifiedList = [int(x) for x in ligne.split(":")]
-    machines = modifiedList.pop(0)
+    machines = modifiedList.pop(0)    
     tasks = modifiedList.pop(0)
+
+    if len(modifiedList) != tasks :
+        raise Exception("Nombre de tâches incorrect.")
+
     return (machines, modifiedList)
 
 
