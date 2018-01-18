@@ -7,3 +7,5 @@ Pour exécuter le programme:
 ```
 
 Aucune bibliothèque n'est requise.
+
+Un jeu d'essai est disponible dans le fichier jeuEssai.txt (à charger dans le programme Python pour tester).
